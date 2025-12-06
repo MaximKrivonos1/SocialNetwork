@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<!-- saved from url=(0152)https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/dd7ac1f18a72622ed2bda9a5cbe19f9c/87d54248-2e9a-44a2-ab99-4728ae8f0ca1/index.html -->
+<html lang="ru">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Городской портал</title>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <!-- Login/Register Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <div class="login-title">Городской портал</div>
+            <div class="login-subtitle">Войдите, чтобы продолжить</div>
+
+
+
+            <div id="loginError" class="error-message hidden"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="text" id="loginEmail" class="form-input" required="" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" id="loginPassword" class="form-input" required="" autocomplete="off">
+                </div>
+                <button type="submit" class="btn">Войти</button>
+            </form>
+
+            <div class="switch-mode">
+                Нет аккаунта? <a id="showRegister">Зарегистрироваться</a>
+            </div>
+        </div>
+
+        <div class="login-box hidden" id="registerBox">
+            <div class="login-title">Регистрация</div>
+            <div class="login-subtitle">Создайте новый аккаунт</div>
+
+            <div id="registerError" class="error-message hidden"></div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label class="form-label">Имя</label>
+                    <input type="text" id="registerFirstName" class="form-input" required="" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Фамилия</label>
+                    <input type="text" id="registerLastName" class="form-input" required="" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="text" id="registerEmail" class="form-input" required="" autocomplete="off">
+                </div>
+                <div class="form-group">
+
+                    <div class="form-group">
+                        <label class="form-label">Город</label>
+                        <input type="text" id="registerCity" class="form-input" list="citiesList" autocomplete="off"
+                            required="">
+                        <datalist id="citiesList"></datalist>
+                        <div id="registerCityError" class="error-message hidden"></div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" id="registerPassword" class="form-input" required="" autocomplete="off">
+                </div>
+                <button type="submit" class="btn">Зарегистрироваться</button>
+            </form>
+
+            <div class="switch-mode">
+                Уже есть аккаунт? <a id="showLogin">Войти</a>
+            </div>
+        </div>
+    </div>
+    <div class="interface">
+        <!-- Main Application -->
+        <div id="mainApp" class="hidden">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo">
+                        <span>🏙️</span>
+                        <span>CityAxis</span>
+                    </div>
+                </div>
+                <div class="sidebar-city-selector"
+                    style="padding: 18px 18px 10px 18px; border-bottom: 1px solid #e5e7eb;">
+                    <label for="citySelectorDropdown"
+                        style="font-size: 14px; font-weight: 500; color: #475569; display: block; margin-bottom: 8px;">Выберите
+                        город:</label>
+                    <input id="citySelectorInput" class="form-input" type="text" list="sidebarCitiesList"
+                        placeholder="Мой город или начните ввод..." autocomplete="off"
+                        style="width: 100%; padding: 8px 12px; border: 1px solid #dde1e6; border-radius: 6px; background: #f8fafc; font-size: 14px; cursor: pointer;">
+                    <datalist id="sidebarCitiesList"></datalist>
+                </div>
+                <nav class="sidebar-nav">
+                    <div class="nav-item active" data-page="news">
+                        <span class="nav-icon">📰</span>
+                        <span>Новости</span>
+                    </div>
+                    <div class="nav-item" data-page="discussions">
+                        <span class="nav-icon">💬</span>
+                        <span>Обсуждения</span>
+                    </div>
+                    <div class="nav-item" data-page="people">
+                        <span class="nav-icon">👥</span>
+                        <span>Люди</span>
+                    </div>
+                    <div class="nav-item" data-page="friends">
+                        <span class="nav-icon">🤝</span>
+                        <span>Друзья</span>
+                    </div>
+                    <div class="nav-item" data-page="messages">
+                        <span class="nav-icon">✉️</span>
+                        <span>Сообщения</span>
+                    </div>
+                    <div class="nav-item" id="suggestNavItem" data-page="suggest">
+                        <span class="nav-icon">💡</span>
+                        <span>Предложить</span>
+                    </div>
+                    <div class="nav-item" data-page="profile">
+                        <span class="nav-icon">👤</span>
+                        <span>Профиль</span>
+                    </div>
+                    <div class="nav-item hidden" id="adminNavItem" data-page="admin">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Админ-панель</span>
+                    </div>
+                </nav>
+
+            </aside>
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <h1 class="header-title" id="pageTitle">Новости</h1>
+                <div style="margin-left: auto; position: relative;">
+                    <button id="headerUserTrigger"
+                        style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; color: #1e293b; padding: 8px 12px; border-radius: 6px; transition: background 0.2s;">
+                        <span id="headerUserAvatar">👤</span>
+                        <span><span id="headerUserName">Пользователь</span>, <span
+                                id="headerUserCity">Город</span></span>
+                        <span style="font-size: 12px; color: #888;">▼</span>
+                    </button>
+                    <div class="hidden" id="headerDropdownMenu"
+                        style="position: absolute; right: 0; top: 100%; margin-top: 4px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); min-width: 150px; z-index: 1000;">
+                        <button id="headerLogoutBtn"
+                            style="width: 100%; padding: 8px 12px; background: #f1f5f9; border: none; border-radius: 4px; color: #475569; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;"
+                            onmouseover="this.style.background=&#39;#e2e8f0&#39;"
+                            onmouseout="this.style.background=&#39;#f1f5f9&#39;">Выйти</button>
+                    </div>
+                </div>
+            </header>
+
+
+
+            <div class="main-container">
+                <!-- News Page -->
+
+
+                <div id="newsPage" class="page active">
+                    <!-- АДМИН: Кнопка добавить новость (зелёная) -->
+                    <div id="addNewsForm"
+                        style="display: none; background: #f5f5f5; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <h3 style="margin-top: 0;">➕ Добавить новость</h3>
+                        <textarea id="newsContentInput" placeholder="Текст новости"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; height: 100px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial;"></textarea>
+                        <select id="newsTopicInput" class="form-control" style="margin-top:12px;">
+                            <option value="">Без темы</option>
+                            <option value="благоустройство">Благоустройство</option>
+                            <option value="мероприятия">Мероприятия</option>
+                            <option value="проблемы">Проблемы</option>
+                            <option value="происшествия">Происшествия</option>
+                            <option value="другое">Другое</option>
+                        </select>
+                        <input id="newsPhotoInput" type="file" placeholder="URL фото (опционально)"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+                        <div style="display: flex; gap: 10px;">
+                            <button id="submitNewsBtn"
+                                style="flex: 1; padding: 10px 20px; background: #14b8a6; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                                Опубликовать</button>
+                            <button id="cancelNewsBtn"
+                                style="flex: 1; padding: 10px 20px; background: #999; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Отмена</button>
+                        </div>
+                    </div>
+
+                    <button id="showAddNewsBtn"
+                        style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; font-weight: 600;">➕
+                        Добавить новость</button>
+
+                    <!-- ЖИТЕЛИ: Кнопка предложить новость (синяя) -->
+                    <div id="suggestNewsForm"
+                        style="display: none; background: #f5f5f5; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 4px solid #2196F3;">
+                        <h3 style="margin-top: 0;">💡 Предложить новость</h3>
+                        <textarea id="suggestNewsContentInput" placeholder="Текст новости"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; height: 100px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial;"></textarea>
+                        <input id="suggestNewsPhotoInput" type="file" placeholder="URL фото (опционально)"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+                        <div style="display: flex; gap: 10px;">
+                            <button id="submitSuggestNewsBtn"
+                                style="flex: 1; padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">📤
+                                Отправить</button>
+                            <button id="cancelSuggestNewsBtn"
+                                style="flex: 1; padding: 10px 20px; background: #999; color: white; border: none; border-radius: 4px; cursor: pointer;">❌
+                                Отмена</button>
+                        </div>
+                    </div>
+
+                    <button id="showSuggestNewsBtn"
+                        style="padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; font-weight: 600;">💡
+                        Предложить новость</button>
+
+                    <div id="newsList"></div>
+                </div>
+
+                <!-- Discussions Page -->
+                <div id="discussionsPage" class="page">
+                    <!-- АДМИН: Кнопка добавить обсуждение (зелёная) -->
+                    <div id="addDiscussionForm"
+                        style="display: none; background: #f5f5f5; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <h3 style="margin-top: 0;">➕ Добавить обсуждение</h3>
+                        <input id="discussionTitleInput" type="text" placeholder="Название"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+                        <textarea id="discussionContentInput" placeholder="Описание"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; height: 100px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial;"></textarea>
+                        <select id="discussionTopicInput" class="form-control" style="margin-top:12px;">
+                            <option value="">Без темы</option>
+                            <option value="благоустройство">Благоустройство</option>
+                            <option value="мероприятия">Мероприятия</option>
+                            <option value="проблемы">Проблемы</option>
+                            <option value="происшествия">Происшествия</option>
+                            <option value="другое">Другое</option>
+                        </select>
+                        <input id="discussionPhotoInput" type="file" placeholder="URL фото (опционально)"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+                        <div style="display: flex; gap: 10px;">
+                            <button id="submitDiscussionBtn"
+                                style="flex: 1; padding: 10px 20px; background: #14b8a6; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                                Опубликовать</button>
+                            <button id="cancelDiscussionBtn"
+                                style="flex: 1; padding: 10px 20px; background: #999; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Отмена</button>
+                        </div>
+                    </div>
+
+                    <button id="showAddDiscussionBtn"
+                        style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; font-weight: 600;">➕
+                        Добавить обсуждение</button>
+
+                    <!-- ЖИТЕЛИ: Кнопка предложить обсуждение (синяя) -->
+                    <div id="suggestDiscussionForm"
+                        style="display: none; background: #f5f5f5; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 4px solid #2196F3;">
+                        <h3 style="margin-top: 0;">💡 Предложить обсуждение</h3>
+                        <input id="suggestDiscussionTitleInput" type="text" placeholder="Название"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+                        <textarea id="suggestDiscussionContentInput" placeholder="Описание"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; height: 100px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial;"></textarea>
+                        <input id="suggestDiscussionPhotoInput" type="file" placeholder="URL фото (опционально)"
+                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+                        <div style="display: flex; gap: 10px;">
+                            <button id="submitSuggestDiscussionBtn"
+                                style="flex: 1; padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">📤
+                                Отправить</button>
+                            <button id="cancelSuggestDiscussionBtn"
+                                style="flex: 1; padding: 10px 20px; background: #999; color: white; border: none; border-radius: 4px; cursor: pointer;">❌
+                                Отмена</button>
+                        </div>
+                    </div>
+
+                    <button id="showSuggestDiscussionBtn"
+                        style="padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; font-weight: 600;">💡
+                        Предложить обсуждение</button>
+
+                    <div id="discussionsList"></div>
+                </div>
+
+                <!-- People Search Page -->
+                <div id="peoplePage" class="page">
+                    <div class="create-box">
+                        <div class="create-title">Поиск людей</div>
+                        <input type="text" id="peopleSearchInput" class="create-input" placeholder="Поиск по имени...">
+                        <div class="form-group"
+                            style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:8px;">
+                            <div class="radio-group" style="display:flex; align-items:center; gap:12px;">
+                                <label class="radio-label">
+                                    <input type="radio" name="cityFilter" value="myCity" checked>
+                                    В моём городе
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="cityFilter" value="allCities">
+                                    Во всех городах
+                                </label>
+                            </div>
+
+                            <!-- Дропдаун интересов в том же ряду -->
+                            <div id="interestsDropdown" style="position:relative; min-width:220px;">
+                                <div id="interestsDropdownToggle"
+                                    style="border:1px solid #ddd; border-radius:6px; padding:6px 10px; font-size:13px; cursor:pointer; background:#fff; display:flex; justify-content:space-between; align-items:center; min-height:34px;">
+                                    <span id="interestsDropdownLabel" style="color:#999;">Фильтр по интересам</span>
+                                    <span style="font-size:11px; color:#999;">▼</span>
+                                </div>
+                                <div id="interestsDropdownMenu"
+                                    style="position:absolute; z-index:10; top:100%; left:0; right:0; background:#fff; border:1px solid #ddd; border-radius:6px; margin-top:4px; padding:8px; box-shadow:0 4px 12px rgba(0,0,0,0.08); display:none; max-height:200px; overflow:auto; font-size:13px;">
+                                    <label style="display:block; margin-bottom:4px;">
+                                        <input type="checkbox" name="interestFilter" value="Спорт"> Спорт
+                                    </label>
+                                    <label style="display:block; margin-bottom:4px;">
+                                        <input type="checkbox" name="interestFilter" value="Музыка"> Музыка
+                                    </label>
+                                    <label style="display:block; margin-bottom:4px;">
+                                        <input type="checkbox" name="interestFilter" value="Кино"> Кино
+                                    </label>
+                                    <label style="display:block; margin-bottom:4px;">
+                                        <input type="checkbox" name="interestFilter" value="Игры"> Игры
+                                    </label>
+                                    <label style="display:block; margin-bottom:4px;">
+                                        <input type="checkbox" name="interestFilter" value="IT"> IT
+                                    </label>
+                                    <label style="display:block; margin-bottom:4px;">
+                                        <input type="checkbox" name="interestFilter" value="Путешествия"> Путешествия
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <button class="create-btn" id="searchPeopleBtn">Найти</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="otherCityInput" class="form-group hidden">
+                    <input type="text" id="otherCityName" class="create-input" placeholder="Название города...">
+                </div>
+                <div class="form-group">
+
+                    <div class="profile-section" id="peopleSearchSection">
+                        <div class="section-title">Результаты поиска</div>
+                        <div id="peopleSearchResults"></div>
+                    </div>
+                </div>
+
+                <!-- Friends Page -->
+                <div id="friendsPage" class="page">
+                    <div class="profile-section">
+                        <div class="section-title">Ваши друзья</div>
+                        <div id="friendsList"></div>
+                    </div>
+                </div>
+
+                <!-- Messages Page -->
+                <div id="messagesPage" class="page">
+                    <div class="profile-section">
+                        <div class="section-title">Диалоги</div>
+                        <div id="messagesList"></div>
+                    </div>
+                    <div class="profile-section hidden" id="messageDialogSection">
+                        <div class="section-title"><span id="dialogTitle"></span></div>
+                        <div id="messageDialogHistory" style="max-height:360px;overflow:auto;margin-bottom:12px;"></div>
+                        <div class="add-comment" id="messageFormWrapper">
+                            <div class="add-comment-avatar" id="dialogUserAvatar"></div>
+                            <textarea class="add-comment-input" id="messageInput" rows="1"
+                                placeholder="Написать сообщение..."></textarea>
+                            <button class="create-btn" id="sendMessageBtn">→</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggest Page -->
+                <div id="suggestPage" class="page">
+                    <div class="create-box">
+                        <div class="create-title">Предложить новость или обсуждение</div>
+                        <div class="form-group">
+                            <label class="form-label">Тип</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="suggestionType" value="news" checked="">
+                                    Новость
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="suggestionType" value="discussion">
+                                    Обсуждение
+                                </label>
+                            </div>
+                        </div>
+                        <div id="pollModeWrapper" style="margin-bottom:12px; display:none;">
+                            <label style="display:flex;align-items:center;font-size:13px;gap:7px;cursor:pointer;">
+                                <input type="checkbox" id="suggestPollCheckbox" style="transform:scale(1.2);"> Это
+                                опрос?
+                            </label>
+                        </div>
+                        <div id="suggestionFormStandard">
+                            <input type="text" id="suggestionTitle" class="create-input" placeholder="Название">
+                            <textarea id="suggestionContent" class="create-textarea"
+                                placeholder="Содержание"></textarea>
+                            <select id="suggestionTopicInput" class="form-control" style="margin-top:12px;">
+                                <option value="">Без темы</option>
+                                <option value="благоустройство">Благоустройство</option>
+                                <option value="мероприятия">Мероприятия</option>
+                                <option value="проблемы">Проблемы</option>
+                                <option value="происшествия">Происшествия</option>
+                                <option value="другое">Другое</option>
+                            </select>
+                            <div style="margin: 10px 0;">
+                                <input type="file" id="suggestionPhotoUpload" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-secondary"
+                                    onclick="document.getElementById(&#39;suggestionPhotoUpload&#39;).click()"
+                                    style="padding: 8px 16px; background: #f1f5f9; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">📷
+                                    Добавить фото</button>
+                                <span id="suggestionPhotoName"
+                                    style="margin-left: 10px; font-size: 12px; color: #666;"></span>
+                            </div>
+                            <button class="create-btn" id="submitSuggestionBtn">Отправить на проверку</button>
+                        </div>
+                        <div id="pollCreationForm" class="hidden" style="margin-top:12px;">
+                            <input type="text" id="pollQuestionInput" class="create-input" placeholder="Тема опроса">
+                            <div id="pollOptionsList"></div>
+                            <button type="button" class="btn-secondary" id="addPollOptionBtn"
+                                style="margin-top:7px">Добавить вариант</button>
+                            <select id="pollTopicInput" class="form-control" style="margin-top:12px;">
+                                <option value="">Без темы</option>
+                                <option value="благоустройство">Благоустройство</option>
+                                <option value="мероприятия">Мероприятия</option>
+                                <option value="проблемы">Проблемы</option>
+                                <option value="происшествия">Происшествия</option>
+                                <option value="другое">Другое</option>
+                            </select>
+                            <button class="create-btn" id="submitPollSuggestionBtn" style="margin-top:13px">Отправить
+                                опрос
+                                на модерацию</button>
+                        </div>
+                    </div>
+                    <div class="profile-section">
+                        <div class="section-title">Мои предложения</div>
+                        <div id="userSuggestionsList"></div>
+                    </div>
+                </div>
+
+                <!-- Admin Panel Page -->
+                <div id="adminPage" class="page">
+                    <div class="profile-section">
+                        <div class="section-title">⚙️ Предложения на модерации</div>
+                        <div id="adminContent"></div>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div id="profilePage" class="page">
+                    <div class="profile-header">
+                        <div class="profile-top">
+                            <div class="profile-avatar" id="profileAvatar"></div>
+                            <div class="profile-info">
+                                <div class="profile-name" id="profileName"></div>
+                                <div class="profile-bio" id="profileBio"></div>
+                                <div style="margin: 10px 0;">
+                                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                                    <button class="btn-secondary"
+                                        onclick="document.getElementById(&#39;avatarUpload&#39;).click()"
+                                        style="padding: 8px 16px; background: #f1f5f9; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">📷
+                                        Загрузить аватар</button>
+                                    <span id="avatarFileName"
+                                        style="margin-left: 10px; font-size: 12px; color: #666;"></span>
+                                </div>
+                                <button class="edit-profile-btn" id="editProfileBtn">Редактировать профиль</button>
+                            </div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 14px; display: block; margin-bottom: 10px;">Интересы:</strong>
+                            <div class="profile-interests" id="profileInterests"></div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <div class="section-title">Галерея</div>
+                        <div id="gallerySection">
+                            <div style="margin-bottom:12px;">
+                                <input type="file" id="galleryPhotoUpload" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-secondary"
+                                    onclick="document.getElementById(&#39;galleryPhotoUpload&#39;).click()"
+                                    style="padding: 8px 16px; background: #f1f5f9; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">📷
+                                    Загрузить фото</button>
+                                <span id="galleryPhotoName"
+                                    style="margin-left: 10px; font-size: 12px; color: #666;"></span>
+                            </div>
+                            <div id="galleryGrid"
+                                style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <div class="section-title" id="personalPostsTitle">Мои посты</div>
+                        <div class="create-box" id="createPersonalPostSection" style="margin-bottom: 20px;">
+                            <div class="custom-file-upload-wrapper" style="margin-bottom:14px;">
+                                <button type="button" class="file-select-btn"
+                                    onclick="document.getElementById('personalPostPhotoInput').click()">📷 Прикрепить
+                                    фото</button>
+                                <span id="personalPostPhotoName" class="file-chosen-name">Файл не выбран</span>
+                                <textarea id="personalPostContent" class="create-textarea"
+                                    placeholder="Что у вас нового?"></textarea>
+                                <input type="file" id="personalPostPhotoInput" accept="image/*" style="display:none">
+                                <button class="create-btn" id="createPersonalPostBtn">Опубликовать</button>
+                            </div>
+                        </div>
+
+                        <!-- ВАЖНО: именно сюда пишется HTML постов -->
+                        <div id="personalPostsList"></div>
+                    </div>
+
+                    <div class="profile-section" id="approvedSuggestionsSection">
+                        <div class="section-title">Мои одобренные предложения</div>
+                        <div id="userDiscussions"></div>
+                    </div>
+                </div>
+
+
+                <!-- Discussion Detail Modal -->
+                <div id="discussionModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">Карточка жителя</div>
+                            <button class="modal-close" id="closeDiscussionModal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="discussionDetail"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Modal -->
+                <div id="editProfileModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">Редактировать профиль</div>
+                            <button class="modal-close" id="closeEditProfileModal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editProfileForm">
+                                <div class="form-group">
+                                    <label class="form-label">Имя</label>
+                                    <input type="text" id="editName" class="form-input" required="">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Биография</label>
+                                    <textarea id="editBio" class="form-input"
+                                        style="min-height: 80px; resize: vertical;"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Интересы (через запятую)</label>
+                                    <input type="text" id="editInterests" class="form-input"
+                                        placeholder="Спорт, Культура, Архитектура">
+                                </div>
+                                <button type="submit" class="btn">Сохранить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                <script src="js/supabase.js"></script>
+                <script src="js/data.js"></script>
+                <script src="js/auth.js"></script>
+                <script src="js/ui.js"></script>
+                <script src="js/app.js"></script>
+
+                <div id="imageModal" class="modal" style="display:none;">
+                    <span id="closeImageModal"
+                        style="position:absolute;top:14px;right:26px;font-size:38px;cursor:pointer;color:#fff;z-index:12;">×</span>
+                    <img id="imageModalImg"
+                        style="display:block;max-width:96vw;max-height:90vh;margin:45px auto 0;box-shadow:0 2px 12px rgba(0,0,0,0.4);border-radius:12px;">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
