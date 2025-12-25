@@ -297,16 +297,15 @@ function createNewsElement(news, commentCount) {
       <div
         class="user-profile"
         data-user-id="${news.author_id}"
-        style="${
-          author.avatar_url
-            ? `background-image: url('${author.avatar_url}');
+        style="${author.avatar_url
+      ? `background-image: url('${author.avatar_url}');
                background-size: cover;
                background-position: center;
                width: 40px;
                height: 40px;
                border-radius: 50%;`
-            : "font-size: 40px; width: 40px; height: 40px; border-radius: 50%; display:flex;align-items:center;justify-content:center;background:#e6e9ef;"
-        }"
+      : "font-size: 40px; width: 40px; height: 40px; border-radius: 50%; display:flex;align-items:center;justify-content:center;background:#e6e9ef;"
+    }"
       >
         ${!author.avatar_url ? avatar : ""}
       </div>
@@ -331,10 +330,9 @@ function createNewsElement(news, commentCount) {
       ${news.content}
     </div>
 
-    ${
-      news.image_url
-        ? `<img src="${news.image_url}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; cursor: pointer;" onclick="window.open('${news.image_url}', '_blank')">`
-        : ""
+    ${news.image_url
+      ? `<img src="${news.image_url}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; cursor: pointer;" onclick="window.open('${news.image_url}', '_blank')">`
+      : ""
     }
 
     <div style="display: flex; gap: 15px; padding-top: 12px; border-top: 1px solid #eee;">
@@ -679,20 +677,20 @@ function createPollElementSync(poll, commentCount = 0) {
     margin-bottom: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   `;
-  
+
   const userVote = poll._userVote;
   const voteData = poll._voteData;
 
   const author = poll.poll_author || {};
   const avatar = author.avatarurl || author.avatar_url || author.avatar || "👤";
-  
+
   const authorHtml = `
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
       <div class="user-profile" data-user-id="${author.id || ""}"
         style="${avatar !== "👤"
-        ? `background-image:url('${avatar}');background-size:cover;background-position:center;width:40px;height:40px;border-radius:50%;`
-        : "font-size: 36px; width: 40px; height: 40px; border-radius: 50%; display:flex;align-items:center;justify-content:center;background:#e6e9ef;"
-      }"
+      ? `background-image:url('${avatar}');background-size:cover;background-position:center;width:40px;height:40px;border-radius:50%;`
+      : "font-size: 36px; width: 40px; height: 40px; border-radius: 50%; display:flex;align-items:center;justify-content:center;background:#e6e9ef;"
+    }"
       >${avatar === "👤" ? avatar : ""}</div>
       <div style="flex:1;">
         <div style="font-weight:600;cursor:pointer;color:#0066cc;" class="user-profile" data-user-id="${author.id || ""}">
@@ -862,16 +860,15 @@ function createDiscussionElement(discussion, commentCount) {
       <div
         class="user-profile"
         data-user-id="${discussion.author_id}"
-        style="${
-          author.avatar_url
-            ? `background-image: url('${author.avatar_url}');
+        style="${author.avatar_url
+      ? `background-image: url('${author.avatar_url}');
                background-size: cover;
                background-position: center;
                width: 40px;
                height: 40px;
                border-radius: 50%;`
-            : "font-size: 40px; width: 40px; height: 40px; border-radius: 50%; display:flex;align-items:center;justify-content:center;background:#e6e9ef;"
-        }"
+      : "font-size: 40px; width: 40px; height: 40px; border-radius: 50%; display:flex;align-items:center;justify-content:center;background:#e6e9ef;"
+    }"
       >
         ${!author.avatar_url ? avatar : ""}
       </div>
@@ -899,10 +896,9 @@ function createDiscussionElement(discussion, commentCount) {
       ${discussion.content}
     </div>
 
-    ${
-      discussion.imageurl
-        ? `<img src="${discussion.imageurl}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; cursor: pointer;" onclick="window.open('${discussion.imageurl}', '_blank')">`
-        : ""
+    ${discussion.imageurl
+      ? `<img src="${discussion.imageurl}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; cursor: pointer;" onclick="window.open('${discussion.imageurl}', '_blank')">`
+      : ""
     }
 
     <div style="display: flex; gap: 15px; padding-top: 12px; border-top: 1px solid #eee;">
@@ -1794,18 +1790,42 @@ async function renderProfilePage(userId = null) {
   }
   // Скрыть/показать загрузку аватара
   const avatarUploadInput = document.getElementById("avatarUpload");
-  const avatarUploadBtn = document.querySelector(
-    "#profilePage button[onclick*='avatarUpload']"
-  );
+const avatarUploadBtn = document.getElementById("avatarUploadBtn");
 
-  if (!isOwn) {
-    if (avatarUploadInput) avatarUploadInput.style.display = "none";
-    if (avatarUploadBtn) avatarUploadBtn.style.display = "none";
-  } else {
-    if (avatarUploadInput) avatarUploadInput.style.display = "none"; // input всё равно скрытый
-    if (avatarUploadBtn) avatarUploadBtn.style.display = "inline-block";
+if (!isOwn) {
+  if (avatarUploadInput) avatarUploadInput.style.display = "none";
+  if (avatarUploadBtn)  avatarUploadBtn.style.display = "none";
+} else {
+  if (avatarUploadInput) avatarUploadInput.style.display = "none"; // скрытый input
+  if (avatarUploadBtn && avatarUploadInput) {
+    avatarUploadBtn.style.display = "inline-block";
+    avatarUploadBtn.onclick = () => avatarUploadInput.click();
   }
+}
+if (isOwn && avatarUploadInput) {
+  avatarUploadInput.onchange = async () => {
+    const file = avatarUploadInput.files[0];
+    if (!file) return;
 
+    try {
+      const newUrl = await uploadPhoto(file, "avatars");
+      if (!newUrl) {
+        alert("Ошибка загрузки аватара");
+        return;
+      }
+
+      await updateUserProfile(currentUser.id, { avatar_url: newUrl });
+      currentUser.avatar_url = newUrl;
+
+      await renderProfilePage(currentUser.id);
+      alert("✅ Аватар обновлён!");
+    } catch (e) {
+      alert("❌ Ошибка: " + (e.message || e));
+    } finally {
+      avatarUploadInput.value = "";
+    }
+  };
+}
   // Скрыть/показать кнопку загрузки в галерею
   const galleryUploadInput = document.getElementById("galleryPhotoUpload");
   const galleryUploadBtn = document.querySelector(
